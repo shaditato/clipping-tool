@@ -59,7 +59,7 @@ const createMediaRecorder = async () => {
 
 // mediaRecorder handlers
 const handleDataAvailable = ({ data }) => state.recordedChunks.push(data);
-const handleStop = () => {
+const handleStop = async () => {
   const blob = new Blob(state.recordedChunks, {
     type: 'video/webm; codecs=vp9'
   });
