@@ -9,11 +9,12 @@ const dialog = {
   showSaveDialog: (opts) => ipcRenderer.invoke('DIALOG_SHOW_SAVE', opts)
 }
 
+// Set initial global renderer state
 const state = { isRecording: false, mediaRecorder: undefined, recordedChunks: [] }
 
+// Add record handling functionality to record button
 const recBtn = document.getElementById('rec-btn');
 
-// Call createMediaRecorder, handle recording start/stop
 recBtn.onclick = async () => {
   if (state.mediaRecorder === undefined) {
     await createMediaRecorder();
