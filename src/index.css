@@ -4,4 +4,22 @@ body {
   margin: auto;
   max-width: 38rem;
   padding: 2rem;
+  overflow: hidden;
+}
+
+#container {
+  cursor: crosshair;
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+}
+
+#frame {  
+  background-color: rgba(0, 0, 0, 0.3);
+  outline: dashed red;
+  height: 100px;
+  width: 100px;
+  position: absolute;
 }

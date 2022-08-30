@@ -45,6 +45,7 @@
     }
   },
   "dependencies": {
+    "@use-gesture/vanilla": "^10.2.19",
     "electron-squirrel-startup": "^1.0.0"
   },
   "devDependencies": {

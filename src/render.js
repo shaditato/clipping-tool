@@ -21,16 +21,25 @@ recBtn.onclick = async () => {
   }
 
   if (state.isRecording) {
-    state.mediaRecorder.stop();
-    state.isRecording = false;
-    state.recordedChunks = [];
-    recBtn.innerText = "Start Recording";
+    ipcRenderer.send('closeCropWindow');
   } else {
-    state.mediaRecorder.start();
-    state.isRecording = true;
-    recBtn.innerText = "Stop Recording";
+    ipcRenderer.send('selectCropArea');
   }
 };
+
+ipcRenderer.on('startRecording', () => {
+  state.mediaRecorder.start();
+  state.isRecording = true;
+  recBtn.innerText = "Stop Recording";
+});
+
+ipcRenderer.on('stopRecording', () => {
+  state.mediaRecorder.stop();
+  state.isRecording = false;
+  state.recordedChunks = [];
+  recBtn.innerText = "Start Recording";
+});
+
 
 const createMediaRecorder = async () => {
   // Retrieve screen as media source
