@@ -13,8 +13,11 @@ const windows = {};
 const createWindow = () => {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
-    width: 800,
-    height: 600,
+    width: 400,
+    height: 200,
+    resizable: false,
+    maximizable: false,
+    autoHideMenuBar: true,
     webPreferences: {
       contextIsolation: false,
       nodeIntegration: true,
@@ -25,9 +28,6 @@ const createWindow = () => {
   // and load the index.html of the app.
   mainWindow.loadFile(path.join(__dirname, 'index.html'));
   windows.main = mainWindow.id;
-
-  // Open the DevTools.
-  mainWindow.webContents.openDevTools();
 };
 
 // This method will be called when Electron has finished

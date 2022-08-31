@@ -1,9 +1,7 @@
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica,
     Arial, sans-serif;
-  margin: auto;
-  max-width: 38rem;
-  padding: 2rem;
+
   overflow: hidden;
 }
 
@@ -19,7 +17,19 @@ body {
 #frame {  
   background-color: rgba(0, 0, 0, 0.3);
   outline: dashed red;
-  height: 100px;
-  width: 100px;
+  height: 0;
+  width: 0;
+  top: 0;
+  left: 0;
   position: absolute;
+}
+
+button {
+  height: 100px;
+  font-size: large;
+}
+
+.red-btn {
+  background-color: crimson;
+  color: white;
 }

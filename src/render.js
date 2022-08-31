@@ -40,13 +40,15 @@ ipcRenderer.on('startRecording', (_, cropDimensions) => {
   state.isRecording = true;
   state.cropDimensions = cropDimensions;
   recBtn.innerText = "Stop Recording";
+  recBtn.classList.add('red-btn');
 });
 
 ipcRenderer.on('stopRecording', () => {
   state.mediaRecorder.stop();
   state.isRecording = false;
   state.recordedChunks = [];
-  recBtn.innerText = "Start Recording";
+  recBtn.innerText = "Record New Clip";
+  recBtn.classList.remove('red-btn');
 });
 
 
