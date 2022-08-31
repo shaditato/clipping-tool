@@ -1,6 +1,14 @@
 const { ipcRenderer } = require('electron')
-const { writeFile } = require('fs');
+const { unlink, writeFile } = require('fs');
+const { default: VideoCrop } = require('video-crop');
 
+// Set fluent-ffmpeg ffmpeg path
+// * Note: this is essential for the video cropping functionality
+const fluentFfmpeg = require('fluent-ffmpeg');
+const { path: ffmpegPath } = require('@ffmpeg-installer/ffmpeg');
+fluentFfmpeg.setFfmpegPath(ffmpegPath);
+
+// Retrieve main process modules needed in renderer
 const desktopCapturer = {
   getSources: (opts) => ipcRenderer.invoke('DESKTOP_CAPTURER_GET_SOURCES', opts)
 }
@@ -10,7 +18,7 @@ const dialog = {
 }
 
 // Set initial global renderer state
-const state = { isRecording: false, mediaRecorder: undefined, recordedChunks: [] }
+const state = { cropDimensions: undefined, isRecording: false, mediaRecorder: undefined, recordedChunks: [] }
 
 // Add record handling functionality to record button
 const recBtn = document.getElementById('rec-btn');
@@ -27,9 +35,10 @@ recBtn.onclick = async () => {
   }
 };
 
-ipcRenderer.on('startRecording', () => {
+ipcRenderer.on('startRecording', (_, cropDimensions) => {
   state.mediaRecorder.start();
   state.isRecording = true;
+  state.cropDimensions = cropDimensions;
   recBtn.innerText = "Stop Recording";
 });
 
@@ -76,11 +85,37 @@ const handleStop = async () => {
 
   const buffer = Buffer.from(await blob.arrayBuffer());
 
-  const { filePath } = await dialog.showSaveDialog({
-    defaultPath: `clip-${Date.now()}.webm`
-  });
+  // Get output file path
+  const defaultPath = `clip-${Date.now()}.webm`
+  const { filePath } = await dialog.showSaveDialog({ defaultPath });
+  const tempPath = `${await ipcRenderer.invoke('TEMP_DIR')}\\${defaultPath}`
 
+  // Crop the video capture to the selected crop area
   if (filePath) {
-    writeFile(filePath, buffer, () => console.log('[Success] Clip Saved'));
+    const { cropDimensions } = state;
+    const opts = {
+      input: tempPath,
+      output: filePath,
+      x: [cropDimensions.x],
+      y: [cropDimensions.y],
+      height: [cropDimensions.height],
+      width: [cropDimensions.width],
+    };
+
+    // Create temporary file of uncropped clip
+    writeFile(tempPath, buffer, err => {
+      if (err) throw err;
+      console.log('[Processing] Cropping Clip...');
+    });
+
+    // Crop clip by clipDimensions and save to filePath
+    const vc = new VideoCrop(opts);
+    await vc.run();
+
+    // Delete temporary file
+    unlink(tempPath, err => {
+      if (err) throw err;
+      console.log('[Success] Clip Saved');
+    })
   }
 }

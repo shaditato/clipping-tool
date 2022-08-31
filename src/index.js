@@ -81,17 +81,16 @@ ipcMain.on('selectCropArea', () => {
 })
 
 // Stop cropping, start recording
-ipcMain.on('stopCropping', (event) => {
+ipcMain.on('stopCropping', (_, cropDimensions) => {
   const mainWindow = BrowserWindow.fromId(windows.main);
   const cropWindow = BrowserWindow.fromId(windows.crop);
   cropWindow.setIgnoreMouseEvents(true);
   cropWindow.setFocusable(false);
   
-  mainWindow.webContents.send('startRecording');
-  console.log("kwlaart")
+  mainWindow.webContents.send('startRecording', cropDimensions);
 })
 
-ipcMain.on('closeCropWindow', (event) => {
+ipcMain.on('closeCropWindow', () => {
   const mainWindow = BrowserWindow.fromId(windows.main);
   const cropWindow = BrowserWindow.fromId(windows.crop);
   cropWindow.close();
@@ -102,3 +101,4 @@ ipcMain.on('closeCropWindow', (event) => {
 // Send main process modules to renderer
 ipcMain.handle('DESKTOP_CAPTURER_GET_SOURCES', (_, opts) => desktopCapturer.getSources(opts));
 ipcMain.handle('DIALOG_SHOW_SAVE', (_, opts) => dialog.showSaveDialog(opts));
+ipcMain.handle('TEMP_DIR', () => app.getPath('temp'));
