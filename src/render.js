@@ -39,7 +39,7 @@ ipcRenderer.on('startRecording', (_, cropDimensions) => {
   state.mediaRecorder.start();
   state.isRecording = true;
   state.cropDimensions = cropDimensions;
-  recBtn.innerText = "Stop Recording";
+  recBtn.innerText = "🛑 Stop Recording";
   recBtn.classList.add('red-btn');
 });
 
@@ -47,7 +47,7 @@ ipcRenderer.on('stopRecording', () => {
   state.mediaRecorder.stop();
   state.isRecording = false;
   state.recordedChunks = [];
-  recBtn.innerText = "Record New Clip";
+  recBtn.innerText = "🎥 Record New Clip";
   recBtn.classList.remove('red-btn');
 });
 

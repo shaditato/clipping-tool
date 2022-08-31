@@ -25,8 +25,13 @@ body {
 }
 
 button {
+  background-color: lightcyan;
+  border-radius: 10px;
+  border-color: gray;
+  border-style: solid;
   height: 100px;
   font-size: large;
+  margin: 5px;
 }
 
 .red-btn {

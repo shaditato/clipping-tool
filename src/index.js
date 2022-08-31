@@ -13,8 +13,8 @@ const windows = {};
 const createWindow = () => {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
-    width: 400,
-    height: 200,
+    width: 350,
+    height: 150,
     resizable: false,
     maximizable: false,
     autoHideMenuBar: true,
